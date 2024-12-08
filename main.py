@@ -7,6 +7,7 @@ import sqlite3
 USERNAME = "admin"
 PASSWORD = "12345"
 API_KEY = "sk_test_super_sensitive_api_key_1234567890"
+TEST_CHANGE = True
 
 # SQL Injection vulnerability
 def connect_to_db():
