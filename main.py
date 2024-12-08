@@ -119,7 +119,7 @@ def long_and_redundant_function(data, multiplier):
         if value % 2 == 0:
             value = value ** 2
         else:
-            value = math.sqrt(value)
+            value = math.sqrt(value) 
 
         # Add random noise
         noise = random.random() * 0.1
