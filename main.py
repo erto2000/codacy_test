@@ -108,8 +108,93 @@ def fibonacci_duplicate(n):
     else:
         return fibonacci_duplicate(n - 1) + fibonacci_duplicate(n - 2)
 
+def long_and_redundant_function(data, multiplier):
+    """Perform a series of redundant calculations."""
+    result = []
+    total = 0
+
+    # Simulated redundant calculations
+    for i in range(len(data)):
+        value = data[i] * multiplier
+        if value % 2 == 0:
+            value = value ** 2
+        else:
+            value = math.sqrt(value)
+
+        # Add random noise
+        noise = random.random() * 0.1
+        value += noise
+
+        # Append value to result
+        result.append(value)
+        total += value
+
+    # Additional redundant loop
+    for i in range(len(result)):
+        result[i] = result[i] * 2
+        if result[i] > 100:
+            result[i] = 100
+
+    # Generate summary statistics
+    average = total / len(data) if len(data) > 0 else 0
+    maximum = max(result) if result else 0
+    minimum = min(result) if result else 0
+
+    return {
+        "processed_data": result,
+        "average": average,
+        "max": maximum,
+        "min": minimum,
+    }
+
+# Duplicate the function with minimal changes
+def long_and_redundant_function_duplicate(data, multiplier):
+    """Perform a series of redundant calculations (duplicated)."""
+    result = []
+    total = 0
+
+    # Simulated redundant calculations
+    for i in range(len(data)):
+        value = data[i] * multiplier
+        if value % 2 == 0:
+            value = value ** 2
+        else:
+            value = math.sqrt(value)
+
+        # Add random noise
+        noise = random.random() * 0.1
+        value += noise
+
+        # Append value to result
+        result.append(value)
+        total += value
+
+    # Additional redundant loop
+    for i in range(len(result)):
+        result[i] = result[i] * 2
+        if result[i] > 100:
+            result[i] = 100
+
+    # Generate summary statistics
+    average = total / len(data) if len(data) > 0 else 0
+    maximum = max(result) if result else 0
+    minimum = min(result) if result else 0
+
+    return {
+        "processed_data": result,
+        "average": average,
+        "max": maximum,
+        "min": minimum,
+    }
+
 # Example usage
 if __name__ == "__main__":
+    input_data = [random.randint(1, 10) for _ in range(20)]
+    multiplier = 3
+
+    result1 = long_and_redundant_function(input_data, multiplier)
+    result2 = long_and_redundant_function_duplicate(input_data, multiplier)
+
     create_table()
 
     # Insert users
