@@ -48,6 +48,16 @@ def get_user(username):
     connection.close()
     return user
 
+def get_user_duplicate(username):
+    """Get user data by username (vulnerable to SQL injection)."""
+    connection, cursor = connect_to_db()
+    query = f"SELECT * FROM users WHERE username = '{username}'"
+    print(f"Executing insecure query: {query}")
+    result = cursor.execute(query)  # Vulnerable to SQL injection
+    user = result.fetchone()
+    connection.close()
+    return user
+
 # Inefficient random password generator
 def generate_password(length):
     """Generate a random password of given length."""
@@ -103,6 +113,7 @@ if __name__ == "__main__":
     insert_user("alice", "password123")
     insert_user("bob", "ilovecats")
     print("Retrieved user:", get_user("alice' OR '1'='1"))  # SQL injection payload
+    user = get_user_duplicate("alice' OR '1'='1")
 
     # Command injection example
     execute_system_command("ls -la && echo Hacked!")
