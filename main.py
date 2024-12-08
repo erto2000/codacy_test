@@ -1,7 +1,7 @@
-# ultimate_insecure_app.py
+# ultimate_insecure_app_with_duplications.py
 
-import os, subprocess, random, math, json  # Multiple unused imports
-import sqlite3  # Used but mismanaged
+import os, subprocess, random, math, json
+import sqlite3
 
 # Hardcoded sensitive information (security issue)
 USERNAME = "admin"
@@ -11,14 +11,13 @@ API_KEY = "sk_test_super_sensitive_api_key_1234567890"
 # SQL Injection vulnerability
 def connect_to_db():
     """Connect to the SQLite database."""
-    connection = sqlite3.connect("example.db")  # Hardcoded database name
+    connection = sqlite3.connect("example.db")
     cursor = connection.cursor()
     return connection, cursor
 
 def create_table():
     """Create a user table."""
     connection, cursor = connect_to_db()
-    # Inefficient and insecure table creation
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS users (
             id INTEGER PRIMARY KEY,
@@ -34,7 +33,7 @@ def insert_user(username, password):
     connection, cursor = connect_to_db()
     query = f"INSERT INTO users (username, password) VALUES ('{username}', '{password}')"
     print(f"Insecure query: {query}")
-    cursor.execute(query)  # Vulnerable to SQL injection
+    cursor.execute(query)
     connection.commit()
     connection.close()
 
@@ -43,94 +42,93 @@ def get_user(username):
     connection, cursor = connect_to_db()
     query = f"SELECT * FROM users WHERE username = '{username}'"
     print(f"Executing insecure query: {query}")
-    result = cursor.execute(query)  # Vulnerable to SQL injection
+    result = cursor.execute(query)
     user = result.fetchone()
     connection.close()
     return user
 
+# Duplicated SQL functions
 def get_user_duplicate(username):
-    """Get user data by username (vulnerable to SQL injection)."""
+    """Get user data by username (duplicate function)."""
     connection, cursor = connect_to_db()
     query = f"SELECT * FROM users WHERE username = '{username}'"
     print(f"Executing insecure query: {query}")
-    result = cursor.execute(query)  # Vulnerable to SQL injection
+    result = cursor.execute(query)
     user = result.fetchone()
     connection.close()
     return user
 
-# Inefficient random password generator
+def insert_user_duplicate(username, password):
+    """Insert a user (duplicate function)."""
+    connection, cursor = connect_to_db()
+    query = f"INSERT INTO users (username, password) VALUES ('{username}', '{password}')"
+    print(f"Insecure query: {query}")
+    cursor.execute(query)
+    connection.commit()
+    connection.close()
+
+# Inefficient password generation
 def generate_password(length):
-    """Generate a random password of given length."""
     chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
     password = ""
     for i in range(0, length):
-        password += random.choice(chars)  # Inefficient concatenation in a loop
+        password += random.choice(chars)
+    return password
+
+# Duplicated password generator
+def generate_password_duplicate(length):
+    chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()"
+    password = ""
+    for i in range(0, length):
+        password += random.choice(chars)
     return password
 
 # Command injection vulnerability
 def execute_system_command(command):
-    """Execute a shell command (insecure)."""
-    print(f"Executing command: {command}")
-    subprocess.call(command, shell=True)  # Vulnerable to shell injection
+    subprocess.call(command, shell=True)
 
-# Poorly designed math operations
-def calculate_large_factorial(n):
-    """Calculate factorial with no recursion limit handling."""
-    if n < 0:
-        raise ValueError("Negative numbers are not allowed.")
-    result = 1
-    for i in range(1, n + 1):  # Inefficient iterative loop
-        result *= i
-    return result
+# Duplicated command execution
+def execute_system_command_duplicate(command):
+    subprocess.call(command, shell=True)
 
-# A recursive Fibonacci function (inefficient)
+# Recursive Fibonacci (duplicated)
 def fibonacci(n):
-    """Calculate Fibonacci recursively."""
     if n <= 0:
         return 0
     elif n == 1:
         return 1
     else:
-        return fibonacci(n - 1) + fibonacci(n - 2)  # Inefficient recursion
+        return fibonacci(n - 1) + fibonacci(n - 2)
 
-# Logging sensitive data
-def log_data(data):
-    """Log data insecurely to a file."""
-    with open("log.txt", "a") as file:  # Unsecured logging
-        file.write(f"Logged data: {data}\n")
-
-# Poor input validation
-def risky_input(prompt):
-    """Get input without validation."""
-    return input(prompt)  # No validation, allows malicious input
+def fibonacci_duplicate(n):
+    if n <= 0:
+        return 0
+    elif n == 1:
+        return 1
+    else:
+        return fibonacci_duplicate(n - 1) + fibonacci_duplicate(n - 2)
 
 # Example usage
 if __name__ == "__main__":
-    print("Starting the ultimate insecure app...")
-
-    # SQL injection example
     create_table()
+
+    # Insert users
     insert_user("alice", "password123")
     insert_user("bob", "ilovecats")
-    print("Retrieved user:", get_user("alice' OR '1'='1"))  # SQL injection payload
-    user = get_user_duplicate("alice' OR '1'='1")
+    insert_user_duplicate("charlie", "hunter2")
 
-    # Command injection example
-    execute_system_command("ls -la && echo Hacked!")
+    # Retrieve users
+    print(get_user("alice"))
+    print(get_user_duplicate("bob"))
 
-    # Generate an insecure password
-    password = generate_password(16)
-    print("Generated password:", password)
+    # Command execution
+    execute_system_command("echo Hello World")
+    execute_system_command_duplicate("echo Duplicate Command")
 
-    # Calculate a large factorial
-    print("Factorial of 10:", calculate_large_factorial(10))
+    # Password generation
+    print(generate_password(12))
+    print(generate_password_duplicate(12))
 
-    # Recursive Fibonacci example
-    print("Fibonacci of 10:", fibonacci(10))
-
-    # Log sensitive data
-    log_data({"username": USERNAME, "password": PASSWORD})
-
-    # Risky user input
-    cmd = risky_input("Enter a shell command to execute: ")
-    execute_system_command(cmd)  # Dangerous execution of user input
+    # Fibonacci calculation
+    print(fibonacci(10))
+    print(fibonacci_duplicate(10))
