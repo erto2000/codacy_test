@@ -15,6 +15,8 @@ def connect_to_db():
     cursor = connection.cursor()
     return connection, cursor
 
+hdsflashdkajf
+
 def create_table():
     """Create a user table."""
     connection, cursor = connect_to_db()
